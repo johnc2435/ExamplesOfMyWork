@@ -1,15 +1,24 @@
 import java.util.*;
 
 /*the goal of this program is ultimately to be able to carry out the operations contained in a string representing a mathematical expression with
-parentheses, +'s, -'s, *'s, /'s and single digit integers, currently it works for this test string */
+parentheses, +'s, -'s, *'s, /'s and single digit integers, currently it works for most inputs. Redundant parenthesis may cause inaccurate answers such
+as ((5+4))
+
+Methods reiterate through arrays more times than necessary, iterations could be trimmed to produce a faster program
+
+*/
 
 public class SolveArithmeticStringProgram{
   
   public static void main(String[] args){
-    
   
-  System.out.print("Final Testing" + "\n");
-  System.out.println(solveArithmeticString("(5+9)-8/3"));
+  System.out.println("Please enter a mathematical expression:");
+  
+  Scanner sc = new Scanner(System.in);
+  String inputExpression = sc.next(); //cannot use spaces between characters in input, no testing to make sure expression is valid
+  
+  System.out.println("Answer = " + solveArithmeticString(inputExpression));
+  
   
     
   }
@@ -36,13 +45,6 @@ public class SolveArithmeticStringProgram{
       }
     }
     
-    System.out.println(simplifiedExpression);
-    System.out.print(parenthesisDepthList[0]);
-    for(i = 1; i < simplifiedExpression.length(); i++){ //will this execute if length is 1?
-      System.out.print(parenthesisDepthList[i]);
-    }
-    System.out.print("\n" + "Max Depth is : " + maxDepth + "\n");
-    
     //look for sequences of repeating maxdepth entries in depthList, the corresponding characters  in the expression
     //are in the innermost parenthesis and constitute a complete expression
     i = 0;
@@ -53,12 +55,11 @@ public class SolveArithmeticStringProgram{
         while(j < simplifiedExpression.length() && parenthesisDepthList[j] == maxDepth){
           j++;
         }
-        System.out.println("substring is: " + simplifiedExpression.substring(i,j) + "\n" + "answer equals:");
-        System.out.println(solveArithmeticSubstring(simplifiedExpression.substring(i,j)));
+        
         tempString = Integer.toString(solveArithmeticSubstring(simplifiedExpression.substring(i,j)));
         simplifiedExpression.delete(i, j);
         simplifiedExpression.insert(i,tempString);
-        System.out.println("i = " + i );
+        
         if((i + tempString.length()) < simplifiedExpression.length() && simplifiedExpression.charAt(i + tempString.length()) == ')'){
           simplifiedExpression.deleteCharAt(i+tempString.length());
           simplifiedExpression.deleteCharAt(i-1);
@@ -74,7 +75,7 @@ public class SolveArithmeticStringProgram{
     
       isAnInt = true;
       
-      for(i = 0; i < simplifiedExpression.length(); i++){
+      for(i = 1; i < simplifiedExpression.length(); i++){
       if(simplifiedExpression.charAt(i) == '(' | simplifiedExpression.charAt(i) == ')' | simplifiedExpression.charAt(i) == '+' |
         simplifiedExpression.charAt(i) == '-' | simplifiedExpression.charAt(i) == '*' | simplifiedExpression.charAt(i) == '/'){
         isAnInt = false;
